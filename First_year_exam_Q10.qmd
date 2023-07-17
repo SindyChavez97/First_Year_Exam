@@ -1,0 +1,57 @@
+---
+title: "First_Year_Exam_Q10"
+format: pdf
+editor: visual
+---
+
+Sindy Chavez: A59018927
+
+```{r, message=FALSE}
+# I will use ggplot2 to make my figure, the following chunk of code loads the package. I may need scales, dplyr, and lubridate to refine my data to make a figure, so I have loaded those as well.  
+library(ggplot2)
+library(scales)
+library(dplyr)
+library(lubridate)
+```
+
+```{r, message=FALSE}
+# I need to obtain my data, which is in a csv file. I have renamed my data file "covid19" to make it easier to type. I need to check my file to ensure I have data in columns, hence the head, function. I also need to make sure that the data is in a format that I can use for my figure. The str function shows me how the data is saved, and I can see that my dates are formatted as characters, which I will fix in the next chunk of code. 
+covid19 <- read.csv("covid19_variants.csv") 
+head(covid19)
+str(covid19)
+
+```
+
+```{r}
+# My dates were saved as characters, using the function below, they have now been converted to be read as dates. I check this using the str function once more. 
+covid19$date <- ymd(covid19$date)
+str(covid19)
+
+```
+
+```{r}
+# I will build my figure and modify it in parts. The first part is to plot my data roughly. I have chosen to plot a line graph, where the variants are in different colors, using the date as my x-axis and the percentage of variants observed as my  y-axis. 
+a <- ggplot(data = covid19) +
+  aes(x=date, y=percentage, color=variant_name) +
+  geom_line() 
+  
+  
+ 
+```
+
+```{r}
+# I will now change my x-axis, labeling the individual months in the year
+b <- a +  scale_x_date(date_breaks="1 month", date_labels = "%b %Y") + theme(axis.text.x = element_text(angle = 45))  
+
+
+
+```
+
+```{r}
+# Finally, I added a title and relabeled my axes as well as my legend. 
+c <- b + labs(title = "Covid 19 Variants in California",
+              x = " " , y = "Percentage of Sequenced Variants",
+         caption = "Figure 1: Exam Question 10"
+             ) + labs(color = "Variant")
+c
+```
